@@ -1,0 +1,17 @@
+﻿<Salas>
+	<sala>
+		<identificador>ABS1293</identificador>
+		<ubicacion>Cartago Paraiso</ubicacion>
+		<capacidad>120</capacidad>
+	</sala>
+	<sala>
+		<identificador>12JKA</identificador>
+		<ubicacion>Cartago Centro</ubicacion>
+		<capacidad>1400</capacidad>
+	</sala>
+	<sala>
+		<identificador>R2D2</identificador>
+		<ubicacion>San Jose</ubicacion>
+		<capacidad>20000</capacidad>
+	</sala>
+</Salas>

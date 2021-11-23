@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<usuarios>
+	<usuario>
+		<nombre>keycal76@gmail.com</nombre>
+		<contrasena>7671</contrasena>
+	</usuario>
+	<usuario>
+		<nombre>AxelGa@gmail.com</nombre>
+		<contrasena>Axel898</contrasena>
+	</usuario>
+	<usuario>
+		<nombre>Lausoto@gmail.com</nombre>
+		<contrasena>7643</contrasena>
+	</usuario>
+	<usuario>
+		<nombre>ValeB2@gmail.com</nombre>
+		<contrasena>VB2</contrasena>
+	</usuario>
+	<usuario>
+		<nombre>Mario64@gmail.com</nombre>
+		<contrasena>MB64</contrasena>
+	</usuario>
+	<usuario>
+		<nombre>JesDiaz@gmail.com</nombre>
+		<contrasena>DTD</contrasena>
+	</usuario>
+<usuario>
+      <nombre>Amongus</nombre>
+      <contrasena>123</contrasena>
+   </usuario>
+</usuarios>
+
