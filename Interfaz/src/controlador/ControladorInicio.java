@@ -22,6 +22,7 @@ public class ControladorInicio implements ActionListener{
         this.vista.btAdmin.addActionListener(this);
         this.vista.btConsulta.addActionListener(this);
         this.vista.btFactura.addActionListener(this);
+        this.vista.btCliente.addActionListener(this);
     }
     
     public void actionPerformed​​(ActionEvent e){
@@ -35,6 +36,9 @@ public class ControladorInicio implements ActionListener{
                 break;
             case​ "Factura":
                 i=2;
+                break;
+            case​ "Cliente":
+                i=4;
                 break;
             default​:
                 break​;

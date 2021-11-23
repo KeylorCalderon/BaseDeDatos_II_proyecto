@@ -79,6 +79,12 @@ public class ControladorUsuario implements ActionListener{
                         controladorMenu.vista.setLocationRelativeTo(null);
                         vista.dispose();
                         break;
+                    case 4:
+                        CompraProductosForm vistaO=new CompraProductosForm();
+                        ControladorCompraProducto controladorOenu=new ControladorCompraProducto(vistaO,modelo,tipoUsuario, pais);
+                        controladorOenu.vista.setVisible(true);
+                        controladorOenu.vista.setLocationRelativeTo(null);
+                        this.vista.dispose();
                     default​:
                         break​;
                 }

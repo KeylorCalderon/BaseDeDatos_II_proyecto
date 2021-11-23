@@ -16,10 +16,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 import modelo.Producto;
 import modelo.Usuario;
+import vista.CompraProductosForm;
 import vista.ConsultaProductosForm;
 
 /**
@@ -27,13 +29,13 @@ import vista.ConsultaProductosForm;
  * @author 1001001222
  */
 public class ControladorCompraProducto  implements ActionListener{
-    public​ ConsultaProductosForm vista;
+    public​ CompraProductosForm vista;
     public​ Usuario modelo;
     public int tipoUsuario;
     public int pais;
     public ArrayList<Producto> productos=new ArrayList<Producto>();
     
-    public​ ControladorCompraProducto(ConsultaProductosForm pVista, Usuario pModelo, int pTipoUsuario, int pPais){
+    public​ ControladorCompraProducto(CompraProductosForm pVista, Usuario pModelo, int pTipoUsuario, int pPais){
         vista=pVista​;
         modelo=pModelo;
         tipoUsuario=pTipoUsuario;
@@ -108,7 +110,9 @@ public class ControladorCompraProducto  implements ActionListener{
             model.addColumn("Sucursal");
             model.addColumn("Precio");
             model.addColumn("Distancia");
-            Object[] columna = new Object[5];
+            model.addColumn("Comprar");
+            model.addColumn("Ver");
+            Object[] columna = new Object[7];
             for(int i=0; i<productos.size(); i++){
                 //try {
                     columna[0]=productos.get(i).Nombre;
@@ -118,10 +122,15 @@ public class ControladorCompraProducto  implements ActionListener{
                     columna[3]=productos.get(i).Precio;
                     columna[4]=productos.get(i).Distancia;
 
-                    /*JButton boton = new JButton("Editar precio");
+                    JButton boton = new JButton("Comprar");
                     boton.setSize(25,45);
                     boton.setVisible(true);
-                    columna[9]=boton;*/
+                    columna[5]=boton;
+                    
+                    JButton boton2 = new JButton("Ver");
+                    boton2.setSize(25,45);
+                    boton2.setVisible(true);
+                    columna[6]=boton2;
                     
                     
                     model.addRow(columna);
