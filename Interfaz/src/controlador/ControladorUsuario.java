@@ -60,7 +60,8 @@ public class ControladorUsuario implements ActionListener{
                 vista.setVisible(true);
                 JOptionPane.showMessageDialog(vista, "Bienvenido: " +modelo.getNombre());
                 vista.setVisible(true);
-                
+                modelo.setNombre(nombreUsuario);
+                modelo.setContrasena(contraseña);
                 switch(tipoUsuario) {
                     case​ 1:
                         ConsultaProductosForm vistaN=new ConsultaProductosForm();
@@ -70,7 +71,11 @@ public class ControladorUsuario implements ActionListener{
                         this.vista.dispose();
                         break;
                     case​ 2:
-                        
+                        FacturaForm vistaZ=new FacturaForm();
+                        ControladorFactura controladorZenu=new ControladorFactura(vistaZ,modelo,tipoUsuario, pais);
+                        controladorZenu.vista.setVisible(true);
+                        controladorZenu.vista.setLocationRelativeTo(null);
+                        this.vista.dispose();
                         break;
                     case 3:
                         AdminProductosForm vistaM=new AdminProductosForm();

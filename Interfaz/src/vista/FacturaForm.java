@@ -6,23 +6,23 @@
 package vista;
 
 import controlador.Conexion;
-import controlador.ControladorEditarProducto;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import modelo.Factura;
 
 /**
  *
  * @author 1001001222
  */
-public class CompraProductosForm extends javax.swing.JFrame {
+public class FacturaForm extends javax.swing.JFrame {
 
     /**
      * Creates new form ConsultaProductosForm
      */
-    public CompraProductosForm() {
+    public FacturaForm() {
         initComponents();
     }
 
@@ -37,15 +37,9 @@ public class CompraProductosForm extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla = new javax.swing.JTable();
-        productos = new javax.swing.JComboBox<>();
-        btConsultar = new javax.swing.JButton();
         btVolver = new javax.swing.JButton();
         BD = new javax.swing.JLabel();
-        client = new javax.swing.JLabel();
-        metodoPago = new javax.swing.JComboBox<>();
-        envio = new javax.swing.JCheckBox();
-        jLabel1 = new javax.swing.JLabel();
-        cantidad = new javax.swing.JTextField();
+        refrescar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -67,75 +61,49 @@ public class CompraProductosForm extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tabla);
 
-        btConsultar.setText("Consultar");
-
         btVolver.setText("Volver");
+        btVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btVolverActionPerformed(evt);
+            }
+        });
 
-        metodoPago.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Efectivo", "Tarjeta de crédito" }));
-
-        envio.setText("Envio");
-
-        jLabel1.setText("Cantidad");
+        refrescar.setText("Refrescar");
+        refrescar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refrescarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addComponent(client, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(btVolver))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(BD, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(BD, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(productos, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(145, 145, 145)
-                        .addComponent(metodoPago, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(envio)
-                        .addGap(80, 80, 80)
-                        .addComponent(btConsultar)
-                        .addGap(32, 32, 32))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(149, 149, 149))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(refrescar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btVolver)))
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 889, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(productos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btConsultar)
-                    .addComponent(metodoPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(envio))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(cantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(client, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(52, 52, 52)
-                        .addComponent(btVolver)
-                        .addGap(11, 11, 11))))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btVolver)
+                    .addComponent(refrescar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(BD, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -154,39 +122,52 @@ public class CompraProductosForm extends javax.swing.JFrame {
                             ((JButton)value).doClick();
                             JButton boton = (JButton) value;
 
-                            if(boton.getText().equals("Comprar")){
-                                int cantidadAComprar=Integer.parseInt(cantidad.getText());
-                                int enviar=0;
-                                if(envio.isSelected()){
-                                    enviar=1;
-                                }
-                                
+                            if(boton.getText().equals("Facturar")){
                                 System.out.println("COMPRAR--"+row+"--"+column);
                                 System.out.println(tabla.getValueAt(row, 0));
                                 System.out.println(tabla.getValueAt(row, 2));
                                 System.out.println(tabla.getValueAt(row, 3));
-                                System.out.println("-----------"+this.client.getText().toString());
                                 
                                 Conexion conexion=new Conexion();
                                 Connection con=conexion.conectar(Integer.parseInt(this.BD.getText()));
                                 //Statement stmt = con.createStatement();
 
                                 CallableStatement param;
-                                param = con.prepareCall("{call insertarFacturaTemp(?,?,?,?,?,?,?)}");
-                                param.setString(1, this.client.getText().toString());
+                                param = con.prepareCall("{call getCant(?,?)}");
+                                param.setString(1, tabla.getValueAt(row, 5).toString());
                                 
-                                String suc=tabla.getValueAt(row, 2).toString();
+                                String suc=tabla.getValueAt(row, 3).toString();
                                 suc=suc.substring(suc.length()-1, suc.length());
                                 param.setInt(2, Integer.parseInt(suc));
                                 
-                                //param.setInt(2, row+1);
-                                param.setInt(3, enviar);
-                                param.setString(4, tabla.getValueAt(row, 0).toString());
-                                param.setInt(5, cantidadAComprar);
-                                param.setFloat(6, Float.parseFloat(tabla.getValueAt(row, 3).toString()));
-                                param.setInt(7, this.metodoPago.getSelectedIndex()+1);
-                                param.executeUpdate();
-                                JOptionPane.showMessageDialog(this, "Bebidas comprada con éxito");
+                                ResultSet rs=param.executeQuery();
+                                int cantidad=0;
+                                while (rs.next()) {
+                                    cantidad=rs.getInt(1);
+                                       //System.out.println("AAAAA:"+rs.getString(1));
+                                }
+                                rs.close();
+                                conexion.CerrarConexion(con);
+                                System.out.println("COMPARACION: "+Integer.toString(cantidad)+"--"+tabla.getValueAt(row, 6).toString());
+                                if(cantidad>Integer.parseInt(tabla.getValueAt(row, 6).toString())){
+                                    Conexion conexion2=new Conexion();
+                                    Connection con2=conexion2.conectar(Integer.parseInt(this.BD.getText()));
+                                    //Statement stmt = con.createStatement();
+
+                                    CallableStatement param2;
+                                    param2 = con2.prepareCall("{call Facturacion(?)}");
+                                    param2.setInt(1, Integer.parseInt(tabla.getValueAt(row, 0).toString()));
+                                    
+                                    param2.executeUpdate();
+                                    
+                                    conexion2.CerrarConexion(con2);
+                                    
+                                    JOptionPane.showMessageDialog(this, "Facturación éxitosa");
+                                }else{
+                                    JOptionPane.showMessageDialog(this, "No hay stock");
+                                }
+                                
+                                
                                 /*EditarProductoForm vista=new EditarProductoForm();
 
                                 ControladorEditarProducto controladorInicio=new ControladorEditarProducto(vista,tabla.getValueAt(row, 0).toString(),Integer.parseInt(this.BD.getText()));
@@ -194,7 +175,7 @@ public class CompraProductosForm extends javax.swing.JFrame {
                                 controladorInicio.vista.setLocationRelativeTo(null);
 
                                 this.dispose();*/
-                                conexion.CerrarConexion(con);
+                                
                             }else if(boton.getText().equals("Ver")){
                                 System.out.println("VER--"+row+"--"+column);
                                 System.out.println(tabla.getValueAt(row, 0));
@@ -211,10 +192,18 @@ public class CompraProductosForm extends javax.swing.JFrame {
                     }
             }
         }catch(Exception ex){
-            JOptionPane.showMessageDialog(this, "No hay stock");
+            JOptionPane.showMessageDialog(this, "Error: No hay stock");
             System.out.println("ERROR: "+ex);
         }
     }//GEN-LAST:event_tablaMouseClicked
+
+    private void btVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btVolverActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btVolverActionPerformed
+
+    private void refrescarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refrescarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_refrescarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -233,13 +222,13 @@ public class CompraProductosForm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CompraProductosForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FacturaForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CompraProductosForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FacturaForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CompraProductosForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FacturaForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CompraProductosForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FacturaForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -247,22 +236,16 @@ public class CompraProductosForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CompraProductosForm().setVisible(true);
+                new FacturaForm().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JLabel BD;
-    public javax.swing.JButton btConsultar;
     public javax.swing.JButton btVolver;
-    public javax.swing.JTextField cantidad;
-    public javax.swing.JLabel client;
-    public javax.swing.JCheckBox envio;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    public javax.swing.JComboBox<String> metodoPago;
-    public javax.swing.JComboBox<String> productos;
+    public javax.swing.JButton refrescar;
     public javax.swing.JTable tabla;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,6 +1,133 @@
 USE [base_CostaRica]
 GO
 
+CREATE PROCEDURE Facturacion
+@inID INT
+
+AS
+BEGIN
+	BEGIN TRY
+		DECLARE
+			@idEmpleado INT,
+			@IdFactura INT;
+
+		SELECT TOP 1
+			@idEmpleado=E.ID
+		FROM
+			Empleados E, FacturaTemporal FT
+		WHERE
+			E.sucursalID=FT.sucursalID AND FT.Id=3;
+
+		BEGIN TRANSACTION facturar
+
+		INSERT INTO Facturas (fecha, clienteID, empleadoID, sucursalID, envio, total)  
+		SELECT
+			FT.fecha, FT.clienteID, @idEmpleado AS empleadoID,
+			FT.sucursalID, FT.envio, (FT.subtotal+FT.subtotal*0.10) AS total
+		FROM
+			FacturaTemporal FT
+		WHERE
+			FT.Id=@inID;
+
+		SET @IdFactura=SCOPE_IDENTITY();
+
+		INSERT INTO Detalles (facturaID, licorID, cantidad, subtotal)  
+		SELECT
+			@IdFactura AS facturaID, FT.licorID,FT.cantidad, FT.subtotal
+		FROM
+			FacturaTemporal FT
+		WHERE
+			FT.Id=@inID;
+
+		UPDATE
+			FacturaTemporal
+		SET
+			pendiente = 1
+		WHERE
+			FacturaTemporal.ID=@inID;
+
+		COMMIT TRANSACTION facturar
+	END TRY
+	BEGIN CATCH
+		IF @@Trancount>0 
+			ROLLBACK TRANSACTION facturar;
+	END CATCH
+END
+GO
+
+EXEC Facturacion 3
+GO
+
+CREATE PROCEDURE getCant
+@inBebida varchar(50),
+@inSucursal INT
+AS
+BEGIN
+	SELECT TOP 1
+		I.cantidad
+	FROM
+		Licores L, Sucursales S, Inventarios I
+	WHERE
+		L.nombre=@inBebida AND L.ID=I.licorID AND I.sucursalID=S.ID AND S.ID=@inSucursal;
+
+END
+GO
+
+EXEC getCant 'Vino',3
+GO
+
+CREATE PROCEDURE getFacturasPendientes
+AS
+BEGIN
+	SELECT
+		L.ID, L.fecha, C.nombre, L.sucursalID, L.envio, Li.nombre, L.cantidad, L.subtotal, TMP.Nombre
+	FROM
+		FacturaTemporal L, Clientes C, TipoMetodoPago TMP, Licores Li
+	WHERE
+		C.ID=L.clienteID AND TMP.ID=L.metodoDePago AND L.licorID=Li.ID AND L.pendiente=0;
+
+END
+GO
+
+EXEC getFacturasPendientes
+GO
+
+CREATE PROCEDURE insertarFacturaTemp
+@inCliente varchar(50),
+@inSucursalID int,
+@inEnvio bit,
+@inLicor varchar(50),
+@inCantidad int,
+@inPrecio float,
+@inMetodoPago int
+
+AS
+BEGIN
+	DECLARE @Fecha DATE,
+			@ClienteID INT,
+			@LicorID INT;
+	SET @Fecha=GETDATE();
+
+	SELECT TOP 1 @LicorID=L.ID
+	FROM Licores L
+	WHERE L.nombre=@inLicor;
+
+	SELECT TOP 1 @ClienteID=L.ID
+	FROM Clientes L, Usuarios U
+	WHERE U.username=@inCliente AND L.usuarioID=U.ID;
+
+	INSERT INTO FacturaTemporal (fecha, clienteID, sucursalID, envio, licorID, cantidad, subtotal,
+								metodoDePago, pendiente)  
+	VALUES(@Fecha, @ClienteID, @inSucursalID, @inEnvio, @LicorID, @inCantidad, @inPrecio*@inCantidad, 
+			@inMetodoPago, 0);
+	--SET @IdLicor=SCOPE_IDENTITY();
+
+END
+GO
+
+--EXEC insertarProducto 'Cerveza', 12031.93
+--GO
+
 CREATE PROCEDURE getProductosSimple
 AS
 BEGIN

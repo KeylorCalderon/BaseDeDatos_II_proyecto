@@ -53,21 +53,21 @@ GO
 --Paises
 INSERT INTO Inventarios VALUES(1,1,24,5000.75);
 INSERT INTO Inventarios VALUES(2,2,120,238230.75);
-INSERT INTO Inventarios VALUES(3,3,23,129319.50);
+INSERT INTO Inventarios VALUES(3,3,283,129319.50);
 INSERT INTO Inventarios VALUES(4,1,732,10000.10);
 INSERT INTO Inventarios VALUES(5,2,392,12030.93);
 INSERT INTO Inventarios VALUES(6,3,39,102012.10);
 
 INSERT INTO Inventarios VALUES(1,2,24,766.75);
 INSERT INTO Inventarios VALUES(2,3,120,276230.75);
-INSERT INTO Inventarios VALUES(3,1,23,39319.50);
+INSERT INTO Inventarios VALUES(3,1,230,39319.50);
 INSERT INTO Inventarios VALUES(4,2,732,2000.10);
 INSERT INTO Inventarios VALUES(5,3,392,3112030.93);
 INSERT INTO Inventarios VALUES(6,1,39,102112.10);
 
 INSERT INTO Inventarios VALUES(1,3,234,50870.75);
 INSERT INTO Inventarios VALUES(2,1,10,2387230.75);
-INSERT INTO Inventarios VALUES(3,2,23,829319.50);
+INSERT INTO Inventarios VALUES(3,2,263,829319.50);
 INSERT INTO Inventarios VALUES(4,3,72,100.10);
 INSERT INTO Inventarios VALUES(5,1,92,130.93);
 INSERT INTO Inventarios VALUES(6,2,3879,1012.10);
@@ -78,6 +78,20 @@ INSERT INTO Clientes VALUES('María','Toruño',5291282,'2aaakskalsk',8);
 INSERT INTO Clientes VALUES('Don','Ramirez',6391282,'2kskaewelsk',9);
 GO
 
+--Tipos de pago
+INSERT INTO TipoMetodoPago VALUES('Tarjeta de crédito');
+INSERT INTO TipoMetodoPago VALUES('Efectivo');
+GO
+
+--MetodosDePago
+INSERT INTO MetodoPago VALUES(1,1);
+INSERT INTO MetodoPago VALUES(1,2);
+INSERT INTO MetodoPago VALUES(1,3);
+INSERT INTO MetodoPago VALUES(2,1);
+INSERT INTO MetodoPago VALUES(2,2);
+INSERT INTO MetodoPago VALUES(2,3);
+GO
+
 --Empleados
 INSERT INTO Empleados (nombre, apellidos, telefono, correo, sucursalID, fotografia, usuarioID)  
 SELECT 'Juan','Vega',1291282,'9932alsk', 1, BulkColumn, 1  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Empleado1.jpg', Single_Blob) as Imagen;
@@ -85,6 +99,20 @@ INSERT INTO Empleados (nombre, apellidos, telefono, correo, sucursalID, fotograf
 SELECT 'Jeimy','Mendez',9391282,'jjjdlsk',2, BulkColumn, 1  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Empleado2.jpg', Single_Blob) as Imagen;
 INSERT INTO Empleados (nombre, apellidos, telefono, correo, sucursalID, fotografia, usuarioID)  
 SELECT 'Fabian','Sanchez',3391282,'aewelsk',3, BulkColumn, 1  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Empleado3.jpg', Single_Blob) as Imagen;
+
+INSERT INTO Empleados (nombre, apellidos, telefono, correo, sucursalID, fotografia, usuarioID)  
+SELECT 'Alejandro','Soto',1291282,'9932alsk', 1, BulkColumn, 1  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Empleado1.jpg', Single_Blob) as Imagen;
+INSERT INTO Empleados (nombre, apellidos, telefono, correo, sucursalID, fotografia, usuarioID)  
+SELECT 'Keylin','Arlin',9391282,'jjjdlsk',2, BulkColumn, 1  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Empleado2.jpg', Single_Blob) as Imagen;
+INSERT INTO Empleados (nombre, apellidos, telefono, correo, sucursalID, fotografia, usuarioID)  
+SELECT 'Pedro','Sanchez',3391282,'aewelsk',3, BulkColumn, 1  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Empleado3.jpg', Single_Blob) as Imagen;
+
+INSERT INTO Empleados (nombre, apellidos, telefono, correo, sucursalID, fotografia, usuarioID)  
+SELECT 'Brayan','Navarro',1291282,'9932alsk', 1, BulkColumn, 1  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Empleado1.jpg', Single_Blob) as Imagen;
+INSERT INTO Empleados (nombre, apellidos, telefono, correo, sucursalID, fotografia, usuarioID)  
+SELECT 'José','Acuña',9391282,'jjjdlsk',2, BulkColumn, 1  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Empleado2.jpg', Single_Blob) as Imagen;
+INSERT INTO Empleados (nombre, apellidos, telefono, correo, sucursalID, fotografia, usuarioID)  
+SELECT 'Eduardo','Lopez',3391282,'aewelsk',3, BulkColumn, 1  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Empleado3.jpg', Single_Blob) as Imagen;
 GO
 
 --Facturas

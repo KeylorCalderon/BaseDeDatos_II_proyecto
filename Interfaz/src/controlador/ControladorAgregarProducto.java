@@ -99,7 +99,11 @@ public class ControladorAgregarProducto implements ActionListener{
                 }
                 break;
             case​ "Volver":
-                
+                AdminProductosForm vistaM=new AdminProductosForm();
+                ControladorAdminProductos controladorMenu=new ControladorAdminProductos(vistaM,modelo,tipoUsuario, pais);
+                controladorMenu.vista.setVisible(true);
+                controladorMenu.vista.setLocationRelativeTo(null);
+                vista.dispose();
                 break;
             case​ "Imagen":
                 String Ruta = "";

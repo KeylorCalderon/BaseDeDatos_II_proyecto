@@ -19,40 +19,41 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
+import modelo.Factura;
 import modelo.Producto;
 import modelo.Usuario;
-import vista.AdminProductosForm;
-import vista.AgregarProductoForm;
 import vista.ConsultaProductosForm;
+import vista.FacturaForm;
 import vista.LoginForm;
 
 /**
  *
  * @author 1001001222
  */
-class ControladorConsultaProductos implements ActionListener{
-    public​ ConsultaProductosForm vista;
+class ControladorFactura implements ActionListener{
+    public​ FacturaForm vista;
     public​ Usuario modelo;
     public int tipoUsuario;
     public int pais;
-    public ArrayList<Producto> productos=new ArrayList<Producto>();
+    public ArrayList<Factura> productos=new ArrayList<Factura>();
     
-    public​ ControladorConsultaProductos(ConsultaProductosForm pVista, Usuario pModelo, int pTipoUsuario, int pPais){
+    public​ ControladorFactura(FacturaForm pVista, Usuario pModelo, int pTipoUsuario, int pPais){
         vista=pVista​;
         modelo=pModelo;
         tipoUsuario=pTipoUsuario;
         pais=pPais;
-        //System.out.println("País: "+pais);
-        this.vista.tabla.setVisible(false);
-        this.vista.btConsultar.addActionListener(this);
+        System.out.println("FACTURACIÓN");
+        //this.vista.tabla.setVisible(false);
+        //this.vista.btConsultar.addActionListener(this);
         this.vista.btVolver.addActionListener(this);
+        this.vista.refrescar.addActionListener(this);
         this.vista.BD.setText(Integer.toString(pPais));
         this.vista.BD.setVisible(false);
-        cargarProducto();
-        //cargarSQL();
-        //cargarTabla();
+        //cargarProducto();
+        cargarSQL();
+        cargarTabla();
     }
-    
+    /*
     public void cargarProducto(){
         try{
                 Conexion conexion=new Conexion();
@@ -69,36 +70,30 @@ class ControladorConsultaProductos implements ActionListener{
                 System.out.println("ERROR: "+e);
             }
     }
-    
+    */
     public void cargarSQL(){
         try{
-                ArrayList<Producto> temp=new ArrayList<Producto>();
+                ArrayList<Factura> temp=new ArrayList<Factura>();
                 Conexion conexion=new Conexion();
                 Connection con=conexion.conectar(pais);
-                //Statement stmt = con.createStatement();
-                
-                CallableStatement param;
-                param = con.prepareCall("{call getProductosConsultaPorSucursal(?)}");
-                param.setString(1, this.vista.productos.getSelectedItem().toString());
-                ResultSet rs = param.executeQuery();
-                
-                //ResultSet rs = stmt.executeQuery("{call getProductosConsultaPorSucursal}");
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery("{call getFacturasPendientes}");
                 while (rs.next()) {
-                    Producto producto=new Producto();
-                    producto.Nombre=rs.getString(1);
+                    Factura producto=new Factura();
+                    producto.ID=rs.getInt(1);
+                    producto.Fecha=rs.getDate(2);
+                    producto.NombreCliente=rs.getString(3);
+                    producto.Sucursal="Sucursal"+Integer.toString(rs.getInt(4));
+                    producto.envio=rs.getInt(5);
+                    producto.NombreBebida=rs.getString(6);
+                    producto.Cantidad=rs.getInt(7);
+                    producto.subtotal=rs.getFloat(8);
+                    producto.TipoDePago=rs.getString(9);
                     
-                    InputStream binaryStream = rs.getBinaryStream(2);
-                    Image image = ImageIO.read(binaryStream);
-                    producto.Foto=image;
-
-                    producto.Sucursal="Sucursal "+rs.getString(3);
-                    producto.Precio=rs.getFloat(4);
-                    producto.Distancia=rs.getFloat(5);
                     temp.add(producto);
                        //System.out.println(rs.getString(1)+"--"+rs.getBlob(4));
                 }
                 rs.close();
-                param.close();
                 conexion.CerrarConexion(con);
                 productos=temp;
             } catch(Exception e){
@@ -108,25 +103,39 @@ class ControladorConsultaProductos implements ActionListener{
     
     public void cargarTabla(){
         DefaultTableModel model = new DefaultTableModel();
-            model.addColumn("Nombre");
-            model.addColumn("Foto");
+            model.addColumn("Serial factura");
+            model.addColumn("Fecha");
+            model.addColumn("Nombre cliente");
             model.addColumn("Sucursal");
-            model.addColumn("Precio");
-            model.addColumn("Distancia");
-            Object[] columna = new Object[5];
+            model.addColumn("Envio");
+            model.addColumn("Bebida");
+            model.addColumn("Cantidad");
+            model.addColumn("Subtotal");
+            model.addColumn("Tipo de pago");
+            model.addColumn("");
+            Object[] columna = new Object[10];
             for(int i=0; i<productos.size(); i++){
                 //try {
-                    columna[0]=productos.get(i).Nombre;
+                    columna[0]=productos.get(i).ID;
+                    columna[1]=productos.get(i).Fecha;
+                    columna[2]=productos.get(i).NombreCliente;
+                    columna[3]=productos.get(i).Sucursal;
+                    
+                    if(productos.get(i).envio==1){
+                        columna[4]="Sí";
+                    }else{
+                        columna[4]="No";
+                    }
+                    columna[5]=productos.get(i).NombreBebida;
+                    
+                    columna[6]=productos.get(i).Cantidad;
+                    columna[7]=productos.get(i).subtotal;
+                    columna[8]=productos.get(i).TipoDePago;
 
-                    columna[1]=new JLabel(new ImageIcon(productos.get(i).Foto));
-                    columna[2]=productos.get(i).Sucursal;
-                    columna[3]=productos.get(i).Precio;
-                    columna[4]=productos.get(i).Distancia;
-
-                    /*JButton boton = new JButton("Editar precio");
+                    JButton boton = new JButton("Facturar");
                     boton.setSize(25,45);
                     boton.setVisible(true);
-                    columna[9]=boton;*/
+                    columna[9]=boton;
                     
                     
                     model.addRow(columna);
@@ -145,14 +154,14 @@ class ControladorConsultaProductos implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         switch(e.getActionCommand()) {
-            case​ "Consultar":
-                this.vista.tabla.setVisible(true);
+            case​ "Refrescar":
+                //this.vista.tabla.setVisible(true);
                 cargarSQL();
                 cargarTabla();
                 break;
             case​ "Volver":
                 LoginForm vistaL=new LoginForm();
-                ControladorUsuario controladorUsuario=new ControladorUsuario(vistaL, modelo, 1, pais);
+                ControladorUsuario controladorUsuario=new ControladorUsuario(vistaL, modelo, 2, pais);
                 controladorUsuario.vista.setVisible(true);
                 controladorUsuario.vista.setLocationRelativeTo(null);
                 this.vista.dispose();

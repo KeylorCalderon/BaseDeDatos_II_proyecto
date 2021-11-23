@@ -261,7 +261,11 @@ public class ControladorAdminProductos implements ActionListener{
                 this.vista.dispose();
                 break;
             case​ "Volver":
-                
+                LoginForm vistaL=new LoginForm();
+                ControladorUsuario controladorUsuario=new ControladorUsuario(vistaL, modelo, 3, pais);
+                controladorUsuario.vista.setVisible(true);
+                controladorUsuario.vista.setLocationRelativeTo(null);
+                this.vista.dispose();
                 break;
             default​:
                 break​;

@@ -13,6 +13,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -23,6 +24,7 @@ import modelo.Producto;
 import modelo.Usuario;
 import vista.CompraProductosForm;
 import vista.ConsultaProductosForm;
+import vista.LoginForm;
 
 /**
  *
@@ -40,11 +42,15 @@ public class ControladorCompraProducto  implements ActionListener{
         modelo=pModelo;
         tipoUsuario=pTipoUsuario;
         pais=pPais;
-        //System.out.println("País: "+pais);
+        System.out.println("Nombre: "+modelo.getNombre());
+        System.out.println("Contraseña: "+modelo.getContrasena());
         this.vista.tabla.setVisible(false);
         this.vista.btConsultar.addActionListener(this);
         this.vista.btVolver.addActionListener(this);
         this.vista.BD.setText(Integer.toString(pPais));
+        this.vista.BD.setVisible(false);
+        this.vista.client.setText(modelo.getNombre());
+        this.vista.client.setVisible(false);
         cargarProducto();
         //cargarSQL();
         //cargarTabla();
@@ -120,7 +126,8 @@ public class ControladorCompraProducto  implements ActionListener{
                     columna[1]=new JLabel(new ImageIcon(productos.get(i).Foto));
                     columna[2]=productos.get(i).Sucursal;
                     columna[3]=productos.get(i).Precio;
-                    columna[4]=productos.get(i).Distancia;
+                    DecimalFormat df = new DecimalFormat("#.00");
+                    columna[4]=(df.format(productos.get(i).Distancia/100000))+" KM";
 
                     JButton boton = new JButton("Comprar");
                     boton.setSize(25,45);
@@ -155,7 +162,11 @@ public class ControladorCompraProducto  implements ActionListener{
                 cargarTabla();
                 break;
             case​ "Volver":
-                
+                LoginForm vistaL=new LoginForm();
+                ControladorUsuario controladorUsuario=new ControladorUsuario(vistaL, modelo, 4, pais);
+                controladorUsuario.vista.setVisible(true);
+                controladorUsuario.vista.setLocationRelativeTo(null);
+                this.vista.dispose();
                 break;
             default​:
                 break​;
