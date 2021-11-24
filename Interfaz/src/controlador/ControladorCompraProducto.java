@@ -25,6 +25,7 @@ import modelo.Usuario;
 import vista.CompraProductosForm;
 import vista.ConsultaProductosForm;
 import vista.LoginForm;
+import vista.QuejaForm;
 
 /**
  *
@@ -47,6 +48,7 @@ public class ControladorCompraProducto  implements ActionListener{
         this.vista.tabla.setVisible(false);
         this.vista.btConsultar.addActionListener(this);
         this.vista.btVolver.addActionListener(this);
+        this.vista.btComentar.addActionListener(this);
         this.vista.BD.setText(Integer.toString(pPais));
         this.vista.BD.setVisible(false);
         this.vista.client.setText(modelo.getNombre());
@@ -157,6 +159,13 @@ public class ControladorCompraProducto  implements ActionListener{
                 this.vista.tabla.setVisible(true);
                 cargarSQL();
                 cargarTabla();
+                break;
+             case​ "Comentar":
+                QuejaForm vistaQ=new QuejaForm();
+                ControladorQueja controladorQ=new ControladorQueja(vistaQ, modelo, 4, pais);
+                controladorQ.vista.setVisible(true);
+                controladorQ.vista.setLocationRelativeTo(null);
+                this.vista.dispose();
                 break;
             case​ "Volver":
                 LoginForm vistaL=new LoginForm();
