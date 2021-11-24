@@ -1,39 +1,60 @@
 USE [base_CostaRica]
+--USE [base_Nicaragua]
+--USE [base_Panama]
 GO
 
-CREATE PROCEDURE registrar
-@inPais varchar(50),
-@inAnos int,
-@inAnejado varchar(50),
-@inFoto varbinary(max),
-@inSucursal int,
-@inCant int,
-@inPrecio float,
-@inNombre varchar(50)
-
+CREATE PROCEDURE getEmpleados
+@inSucursal INT
 AS
 BEGIN
-	DECLARE @IDPais INT, @IDAnejado INT, @IdLicor INT;
-	SELECT TOP 1 @IDPais=L.ID
-	FROM Paises L
-	WHERE L.pais=@inPais;
-
-	SELECT TOP 1 @IDAnejado=L.ID
-	FROM TiposAnejado L
-	WHERE L.tipo=@inAnejado;
-
-	INSERT INTO Licores (procedenciaID, years, tipoAnejadoID, fotografia, nombre)  
-	VALUES(@IDPais, @inAnos, @IDAnejado, @inFoto, @inNombre);
-	SET @IdLicor=SCOPE_IDENTITY();
-
-	INSERT INTO Inventarios (licorID, sucursalID, cantidad, precio)  
-	VALUES(@IdLicor, @inSucursal, @inCant, @inPrecio);
+	SELECT 
+		E.nombre, E.apellidos, E.telefono, E.correo, E.fotografia
+	FROM
+		Empleados E
+	WHERE
+		E.sucursalID=@inSucursal;
 
 END
 GO
 
---EXEC insertarProducto 'Cerveza', 12031.93
---GO
+EXEC getEmpleados 1
+GO
+
+CREATE PROCEDURE registrar
+@inUsuario varchar(50),
+@inContrasena varchar(50),
+@inNombre varchar(50),
+@inApellidos varchar(50),
+@inTelefono int,
+@inCorreo varchar(50),
+@inFechaNacimiento date
+
+AS
+BEGIN
+	BEGIN TRY
+		DECLARE
+			@usuarioID INT;
+
+		BEGIN TRANSACTION registrar
+
+		INSERT INTO Usuarios VALUES(@inUsuario,@inContrasena,4);
+
+		SET @usuarioID=SCOPE_IDENTITY();
+
+		INSERT INTO Clientes VALUES(@inNombre,@inApellidos,@inTelefono,@inCorreo,@usuarioID,@inFechaNacimiento);
+
+		COMMIT TRANSACTION registrar
+	END TRY
+	BEGIN CATCH
+		IF @@Trancount>0 
+			ROLLBACK TRANSACTION registrar;
+	END CATCH
+
+END
+GO
+
+EXEC registrar 'Prueba','Contra','Pruebas','deInsert',928129,'CorreoPrueba','10-09-2000'
+GO
 
 CREATE PROCEDURE Facturacion
 @inID INT

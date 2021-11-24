@@ -16,6 +16,9 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -25,6 +28,7 @@ import modelo.Producto;
 import modelo.Usuario;
 import vista.AdminProductosForm;
 import vista.AgregarProductoForm;
+import vista.InicioForm;
 import vista.LoginForm;
 import vista.RegistroForm;
 
@@ -37,6 +41,7 @@ public class ControladorRegistro implements ActionListener{
     Image mImagen;
     ImageIcon mIcono;
     File image;
+    LocalDate fechaActual;
     
     public​ ControladorRegistro(RegistroForm pVista, Usuario pModelo, int pTipoUsuario, int pPais){
         vista=pVista​;
@@ -47,61 +52,147 @@ public class ControladorRegistro implements ActionListener{
         this.vista.btRegistrar.addActionListener(this);
         this.vista.btImagen.addActionListener(this);
         this.vista.btVolver.addActionListener(this);
-        cargarDesplegables();
+        this.vista.mes.addActionListener(this);
+        //cargarDesplegables();
+        cargarAnoYMes();
+        
+        fechaActual = LocalDate.now();
+        System.out.println(fechaActual);
+        fechaActual=fechaActual.minusYears(17);
+        System.out.println(fechaActual);
         //cargarSQL();
+    }
+    
+    public void cargarAnoYMes(){
+        this.vista.ano.removeAllItems();
+        this.vista.mes.removeAllItems();
+        for(int i=1930; i<2022; i++){
+            this.vista.ano.addItem(Integer.toString(i));
+        }
+        this.vista.mes.addItem("Enero");
+        this.vista.mes.addItem("Febrero");
+        this.vista.mes.addItem("Marzo");
+        this.vista.mes.addItem("Abril");
+        this.vista.mes.addItem("Mayo");
+        this.vista.mes.addItem("Junio");
+        this.vista.mes.addItem("Julio");
+        this.vista.mes.addItem("Agosto");
+        this.vista.mes.addItem("Septiembre");
+        this.vista.mes.addItem("Octubre");
+        this.vista.mes.addItem("Noviembre");
+        this.vista.mes.addItem("Diciembre");
+    }
+    
+    public void cargarDia(){
+        this.vista.dia.removeAllItems();
+        int cantDias=0;
+        switch(this.vista.mes.getSelectedIndex()) {
+            case 0:
+                cantDias=31;
+                break;
+            case 1:
+                cantDias=28;
+                break;
+            case 2:
+                cantDias=31;
+                break;
+            case 3:
+                cantDias=30;
+                break;
+            case 4:
+                cantDias=31;
+                break;
+            case 5:
+                cantDias=30;
+                break;
+            case 6:
+                cantDias=31;
+                break;
+            case 7:
+                cantDias=31;
+                break;
+            case 8:
+                cantDias=30;
+                break;
+            case 9:
+                cantDias=31;
+                break;
+            case 10:
+                cantDias=30;
+                break;
+            case 11:
+                cantDias=31;
+                break;
+        }
+        for(int i=0; i<cantDias; i++){
+            this.vista.dia.addItem(Integer.toString(i+1));
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         switch(e.getActionCommand()) {
-            case​ "Agregar":
+            case​ "Registrarse":
                 try{
-                    String procedencia="";//this.vista.paises.getSelectedItem().toString();
-                    int anos=Integer.parseInt(this.vista.nombre.getText());
-                    String anejado="";//this.vista.anejado.getSelectedItem().toString();
-                    //ImageIcon mIcono
-                    int sucursal=1;//this.vista.sucursal.getSelectedIndex();
-                    int cant=Integer.parseInt(this.vista.correo.getText());
-                    float prec=Float.parseFloat(this.vista.nacimiento.getText());
-                    String nombre=this.vista.contrasena.getText();
+                    String dia=this.vista.dia.getSelectedItem().toString();
+                    if(Integer.parseInt(dia)<=9){
+                        dia="0"+dia;
+                    }
+                    String mes=Integer.toString((this.vista.mes.getSelectedIndex()+1));
+                    if(Integer.parseInt(mes)<=9){
+                        mes="0"+mes;
+                    }
                     
+                    String nacimiento=this.vista.ano.getSelectedItem().toString()+"-"+mes+"-"+dia;
                     
-                    Conexion conexion=new Conexion();
-                    Connection con=conexion.conectar(pais);
-                    Statement stmt = con.createStatement();
-                    CallableStatement param;
-                    param = con.prepareCall("{call insertarProducto(?,?,?,?,?,?,?,?)}");
-                    param.setString(1, procedencia);
-                    param.setInt(2, anos);
-                    param.setString(3, anejado);
+                    DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDate date = LocalDate.parse(nacimiento,df);
                     
-                    FileInputStream  fis ;
-                    fis = new FileInputStream(image);
-                    param.setBinaryStream(4,fis,(int) (image.length()));
-                    
-                    param.setInt(5, sucursal);
-                    param.setInt(6, cant);
-                    param.setFloat(7, prec);
-                    param.setString(8, nombre);
-                    
-                    
-                    param.executeUpdate();
-                    System.out.println("++++++++++++++++++++");
-                    stmt.close();
-                    conexion.CerrarConexion(con);
-                    
-                    JOptionPane.showMessageDialog(vista, "Objeto añadido");
+                    Period period = Period.between(date, fechaActual);
+
+                    if(period.getYears()>0){
+                        System.out.println("Mayor de edad: "+period.getYears()+" "+fechaActual+"--"+date);
+                        String user=this.vista.usuario.getText();
+                        String contra=this.vista.contrasena.getText();
+                        String nombre=this.vista.nombre.getText();
+                        String apellidos=this.vista.apellido.getText();
+                        int telefono=Integer.parseInt(this.vista.telefono.getText());
+                        String correo=this.vista.correo.getText();
+                        //ImageIcon mIcono
+
+                        Conexion conexion=new Conexion();
+                        Connection con=conexion.conectar(pais);
+                        Statement stmt = con.createStatement();
+                        CallableStatement param;
+                        param = con.prepareCall("{call registrar(?,?,?,?,?,?,?)}");
+                        param.setString(1, user);
+                        param.setString(2, contra);
+                        param.setString(3, nombre);
+                        param.setString(4, apellidos);
+                        param.setInt(5, telefono);
+                        param.setString(6, correo);
+                        param.setString(7, nacimiento);
+
+
+                        param.executeUpdate();
+                        System.out.println("++++++++++++++++++++");
+                        stmt.close();
+                        conexion.CerrarConexion(con);
+                        
+                        
+                        JOptionPane.showMessageDialog(vista, "Registro completado");
+                        cerrarVentana();
+                    }else{
+                        System.out.println("Menor de edad: "+period.getYears()+" "+fechaActual+"--"+date);
+                        JOptionPane.showMessageDialog(vista, "Necesita ser mayor de edad para usar este servicio");
+                    }
                 }catch(Exception ex){
                     System.out.println("ERROR: "+ex);
                     JOptionPane.showMessageDialog(vista, "Hay un error en los datos");
                 }
                 break;
             case​ "Volver":
-                AdminProductosForm vistaM=new AdminProductosForm();
-                ControladorAdminProductos controladorMenu=new ControladorAdminProductos(vistaM,modelo,tipoUsuario, pais);
-                controladorMenu.vista.setVisible(true);
-                controladorMenu.vista.setLocationRelativeTo(null);
-                vista.dispose();
+                cerrarVentana();
                 break;
             case​ "Imagen":
                 String Ruta = "";
@@ -122,43 +213,16 @@ public class ControladorRegistro implements ActionListener{
                 }
                 break;
             default​:
+                cargarDia();
                 break​;
         }
     }
 
-    private void cargarDesplegables() {
-        try{
-           Conexion conexion=new Conexion();
-            Connection con=conexion.conectar(pais);
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("{call getPaises}");
-            while (rs.next()) {
-                this.vista.paises.addItem(rs.getString(1));
-                   //System.out.println(rs.getString(1)+"--"+rs.getBlob(4));
-            }
-            rs.close();
-            stmt.close();
-            
-            Statement stmt2 = con.createStatement();
-            ResultSet rs2 = stmt2.executeQuery("{call getAnejado}");
-            while (rs2.next()) {
-                this.vista.anejado.addItem(rs2.getString(1));
-                   //System.out.println(rs.getString(1)+"--"+rs.getBlob(4));
-            }
-            rs2.close();
-            stmt2.close();
-            
-            Statement stmt3 = con.createStatement();
-            ResultSet rs3 = stmt3.executeQuery("{call getSucursal}");
-            while (rs3.next()) {
-                this.vista.sucursal.addItem("Sucursal"+rs3.getString(1));
-                   //System.out.println(rs.getString(1)+"--"+rs.getBlob(4));
-            }
-            rs3.close();
-            stmt3.close();
-            conexion.CerrarConexion(con);
-        } catch(Exception e){
-            System.out.println("ERROR: "+e);
-        }
+    private void cerrarVentana() {
+        InicioForm vista=new InicioForm();
+        ControladorInicio controladorInicio=new ControladorInicio(vista);
+        controladorInicio.vista.setVisible(true);
+        controladorInicio.vista.setLocationRelativeTo(null);
+        this.vista.dispose();
     }
 }

@@ -23,6 +23,7 @@ public class ControladorInicio implements ActionListener{
         this.vista.btConsulta.addActionListener(this);
         this.vista.btFactura.addActionListener(this);
         this.vista.btCliente.addActionListener(this);
+        this.vista.btRegistro.addActionListener(this);
     }
     
     public void actionPerformed​​(ActionEvent e){

@@ -5,6 +5,13 @@
  */
 package vista;
 
+import controlador.Conexion;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import controlador.ControladorConsultaEmpleados;
+
 /**
  *
  * @author 1001001222
@@ -47,6 +54,11 @@ public class ConsultaProductosForm extends javax.swing.JFrame {
 
             }
         ));
+        tabla.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabla);
 
         btConsultar.setText("Consultar");
@@ -95,6 +107,39 @@ public class ConsultaProductosForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
+        try{
+            int column = tabla.getColumnModel().getColumnIndexAtX(evt.getX());
+            int row = evt.getY()/tabla.getRowHeight();
+            
+
+            if(row<tabla.getRowCount() && row >=0 && column < tabla.getColumnCount() && column >=0){
+                    Object value=tabla.getValueAt(row, column);
+                    if(value instanceof JButton){
+                            ((JButton)value).doClick();
+                            JButton boton = (JButton) value;
+
+                            if(boton.getText().equals("Ver")){
+                                System.out.println("VER--"+row+"--"+column);
+                                System.out.println(tabla.getValueAt(row, 0));
+                                System.out.println("-----------");
+
+                                ConsultaEmpleadosForm vistaN=new ConsultaEmpleadosForm();
+
+                                ControladorConsultaEmpleados controladorInicio=new ControladorConsultaEmpleados(vistaN,tabla.getValueAt(row, 2).toString(),Integer.parseInt(this.BD.getText()));
+                                controladorInicio.vista.setVisible(true);
+                                controladorInicio.vista.setLocationRelativeTo(null);
+
+                                this.dispose();
+                            }
+                    }
+            }
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(this, "No hay stock");
+            System.out.println("ERROR: "+ex);
+        }
+    }//GEN-LAST:event_tablaMouseClicked
 
     /**
      * @param args the command line arguments

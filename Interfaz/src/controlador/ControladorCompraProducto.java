@@ -117,8 +117,8 @@ public class ControladorCompraProducto  implements ActionListener{
             model.addColumn("Precio");
             model.addColumn("Distancia");
             model.addColumn("Comprar");
-            model.addColumn("Ver");
-            Object[] columna = new Object[7];
+            //model.addColumn("Ver");
+            Object[] columna = new Object[6];
             for(int i=0; i<productos.size(); i++){
                 //try {
                     columna[0]=productos.get(i).Nombre;
@@ -134,10 +134,7 @@ public class ControladorCompraProducto  implements ActionListener{
                     boton.setVisible(true);
                     columna[5]=boton;
                     
-                    JButton boton2 = new JButton("Ver");
-                    boton2.setSize(25,45);
-                    boton2.setVisible(true);
-                    columna[6]=boton2;
+                    
                     
                     
                     model.addRow(columna);

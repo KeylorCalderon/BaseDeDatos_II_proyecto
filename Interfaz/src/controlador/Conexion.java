@@ -21,8 +21,21 @@ public class Conexion {
     public Connection conectar (int i)throws ClassNotFoundException, SQLException{      
         try{
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection con= DriverManager.getConnection(url);
-            System.out.println("Conexión exitosa");
+            String urlCon="";
+            System.out.println("Pais a conectarse: "+i);
+            switch(i){
+                case 0:
+                    urlCon=url;
+                    break;
+                case 1:
+                    urlCon=url2;
+                    break;
+                case 2:
+                    urlCon=url3;
+                    break;
+            }
+            Connection con= DriverManager.getConnection(urlCon);
+            System.out.println("Conexión exitosa: "+urlCon);
             return con;
         } catch(Exception e){
             System.out.println("Falló al conectar "+e);

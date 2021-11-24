@@ -1,8 +1,6 @@
-USE [base_CostaRica]
+USE [base_Panama]
 GO
 
-USE [base_CostaRica]
-GO
 --Tipos de usuario
 INSERT INTO TiposDeUsuario VALUES('Consulta');
 INSERT INTO TiposDeUsuario VALUES('Factura');
@@ -32,17 +30,17 @@ INSERT INTO Paises VALUES('Francia');
 GO
 --Licores
 INSERT INTO Licores (procedenciaID, years, tipoAnejadoID, fotografia, nombre)  
-SELECT 1,10,1, BulkColumn, 'Vino'  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Licor1.jpg', Single_Blob) as Imagen;
+SELECT 1,10,1, BulkColumn, 'Vino P'  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Licor1.jpg', Single_Blob) as Imagen;
 INSERT INTO Licores (procedenciaID, years, tipoAnejadoID, fotografia, nombre)  
-SELECT 1,20,2, BulkColumn, 'Alcohol'  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Licor2.jpg', Single_Blob) as Imagen;
+SELECT 1,20,2, BulkColumn, 'Alcohol P'  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Licor2.jpg', Single_Blob) as Imagen;
 INSERT INTO Licores (procedenciaID, years, tipoAnejadoID, fotografia, nombre)  
-SELECT 2,12,3, BulkColumn, 'Agua'  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Licor3.jpg', Single_Blob) as Imagen;
+SELECT 2,12,3, BulkColumn, 'Agua P'  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Licor3.jpg', Single_Blob) as Imagen;
 INSERT INTO Licores (procedenciaID, years, tipoAnejadoID, fotografia, nombre)  
-SELECT 2,3,1, BulkColumn, 'Vino tinto'  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Licor4.png', Single_Blob) as Imagen;
+SELECT 2,3,1, BulkColumn, 'Vino tinto P'  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Licor4.png', Single_Blob) as Imagen;
 INSERT INTO Licores (procedenciaID, years, tipoAnejadoID, fotografia, nombre)  
-SELECT 3,1,2, BulkColumn, 'Cerveza'  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Licor5.jpg', Single_Blob) as Imagen;
+SELECT 3,1,2, BulkColumn, 'Cerveza P'  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Licor5.jpg', Single_Blob) as Imagen;
 INSERT INTO Licores (procedenciaID, years, tipoAnejadoID, fotografia, nombre)  
-SELECT 3,50,3, BulkColumn, 'Cerveza azul'  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Licor6.jpg', Single_Blob) as Imagen;
+SELECT 3,50,3, BulkColumn, 'Cerveza azul P'  FROM Openrowset(Bulk 'C:\Users\1001001222\Documents\BD\Licores\Licor6.jpg', Single_Blob) as Imagen;
 GO
 
 --Sucursales
