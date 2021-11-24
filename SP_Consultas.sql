@@ -90,6 +90,35 @@ BEGIN
 END
 GO
 
+
+CREATE PROCEDURE ventasXEmpleadoXSucursal
+AS
+BEGIN
+	CREATE TABLE #ventas (ID int IDENTITY(1,1), licorID int,ventas int,sucursalID int, empleadoID int)
+	INSERT INTO #ventas
+	SELECT
+		licorID, count(licorID), sucursalID, empleadoID
+	FROM
+		Detalles, Facturas
+	WHERE
+		Facturas.ID = Detalles.facturaID
+	GROUP BY
+		Facturas.sucursalID, Detalles.licorID, Facturas.empleadoID;
+
+	SELECT DISTINCT 
+		V.sucursalID as Sucursal, L.nombre, V.ventas AS Ventas, E.nombre
+	FROM
+		#ventas V, Licores L, Empleados E
+	WHERE
+		V.licorID = L.ID AND E.ID=V.empleadoID
+	ORDER BY
+		V.ventas DESC
+
+	DROP TABLE #ventas
+
+END
+GO
+
 CREATE PROCEDURE verComentarios
 AS
 BEGIN
@@ -129,8 +158,11 @@ GO
 EXEC ventasXtipoPagoXSucursalXFechas
 GO
 
-EXEC verComentarios
+EXEC ventasXEmpleadoXSucursal
 GO
+
+EXEC verComentarios
+GOg
 
 EXEC comentarios 'Mal servicio, no recomendado', 2, 2, 2
 GO

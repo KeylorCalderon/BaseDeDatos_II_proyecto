@@ -3,6 +3,20 @@ USE [base_CostaRica]
 --USE [base_Panama]
 GO
 
+CREATE PROCEDURE getEmpleadosSimple
+AS
+BEGIN
+	SELECT 
+		E.nombre, E.apellidos
+	FROM
+		Empleados E;
+
+END
+GO
+
+EXEC getEmpleadosSimple
+GO
+
 CREATE PROCEDURE getEmpleados
 @inSucursal INT
 AS
