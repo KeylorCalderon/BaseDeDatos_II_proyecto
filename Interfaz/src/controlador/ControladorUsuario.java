@@ -139,13 +139,14 @@ public class ControladorUsuario implements ActionListener{
         ControladorInicio controladorInicio=new ControladorInicio(vista);
         controladorInicio.vista.setVisible(true);
         controladorInicio.vista.setLocationRelativeTo(null);
+        this.vista.dispose();
     }
 
     private void registrarse() {
-        RegistroForm vistaM=new RegistroForm();
+        /*RegistroForm vistaM=new RegistroForm();
         ControladorRegistro controladorRegistro=new ControladorRegistro(modelo,vistaM);
         controladorRegistro.vista.setVisible(true);
-        controladorRegistro.vista.setLocationRelativeTo(null);
+        controladorRegistro.vista.setLocationRelativeTo(null);*/
         vista.dispose();
     }
 }

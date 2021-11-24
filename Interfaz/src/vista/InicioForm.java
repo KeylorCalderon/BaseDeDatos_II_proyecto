@@ -32,6 +32,7 @@ public class InicioForm extends javax.swing.JFrame {
         btFactura = new javax.swing.JButton();
         pais = new javax.swing.JComboBox<>();
         btCliente = new javax.swing.JButton();
+        btRegistro = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -65,6 +66,13 @@ public class InicioForm extends javax.swing.JFrame {
             }
         });
 
+        btRegistro.setText("Registrar");
+        btRegistro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btRegistroActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -77,7 +85,8 @@ public class InicioForm extends javax.swing.JFrame {
                         .addComponent(btAdmin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btConsulta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btFactura, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btCliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(btCliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btRegistro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(141, 141, 141))
         );
         layout.setVerticalGroup(
@@ -91,9 +100,11 @@ public class InicioForm extends javax.swing.JFrame {
                 .addComponent(btConsulta)
                 .addGap(42, 42, 42)
                 .addComponent(btFactura)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addGap(41, 41, 41)
                 .addComponent(btCliente)
-                .addGap(24, 24, 24))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addComponent(btRegistro)
+                .addGap(20, 20, 20))
         );
 
         pack();
@@ -114,6 +125,10 @@ public class InicioForm extends javax.swing.JFrame {
     private void btClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClienteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btClienteActionPerformed
+
+    private void btRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRegistroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btRegistroActionPerformed
 
     /**
      * @param args the command line arguments
@@ -155,6 +170,7 @@ public class InicioForm extends javax.swing.JFrame {
     public javax.swing.JButton btCliente;
     public javax.swing.JButton btConsulta;
     public javax.swing.JButton btFactura;
+    public javax.swing.JButton btRegistro;
     public javax.swing.JComboBox<String> pais;
     // End of variables declaration//GEN-END:variables
 }

@@ -40,14 +40,26 @@ public class ControladorInicio implements ActionListener{
             case​ "Cliente":
                 i=4;
                 break;
+            case​ "Registrar":
+                i=5;
+                break;
             default​:
                 break​;
         }
-        LoginForm vista=new LoginForm();
-        Usuario modelo = new Usuario();
-        ControladorUsuario controladorUsuario=new ControladorUsuario(vista, modelo, i, this.vista.pais.getSelectedIndex());
-        controladorUsuario.vista.setVisible(true);
-        controladorUsuario.vista.setLocationRelativeTo(null);
-        this.vista.dispose();
+        if(i!=5){
+            LoginForm vista=new LoginForm();
+            Usuario modelo = new Usuario();
+            ControladorUsuario controladorUsuario=new ControladorUsuario(vista, modelo, i, this.vista.pais.getSelectedIndex());
+            controladorUsuario.vista.setVisible(true);
+            controladorUsuario.vista.setLocationRelativeTo(null);
+            this.vista.dispose();
+        }else{
+            RegistroForm vista=new RegistroForm();
+            Usuario modelo = new Usuario();
+            ControladorRegistro controladorUsuario=new ControladorRegistro(vista, modelo, i, this.vista.pais.getSelectedIndex());
+            controladorUsuario.vista.setVisible(true);
+            controladorUsuario.vista.setLocationRelativeTo(null);
+            this.vista.dispose();
+        }
     }
 }

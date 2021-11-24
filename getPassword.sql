@@ -1,6 +1,40 @@
 USE [base_CostaRica]
 GO
 
+CREATE PROCEDURE registrar
+@inPais varchar(50),
+@inAnos int,
+@inAnejado varchar(50),
+@inFoto varbinary(max),
+@inSucursal int,
+@inCant int,
+@inPrecio float,
+@inNombre varchar(50)
+
+AS
+BEGIN
+	DECLARE @IDPais INT, @IDAnejado INT, @IdLicor INT;
+	SELECT TOP 1 @IDPais=L.ID
+	FROM Paises L
+	WHERE L.pais=@inPais;
+
+	SELECT TOP 1 @IDAnejado=L.ID
+	FROM TiposAnejado L
+	WHERE L.tipo=@inAnejado;
+
+	INSERT INTO Licores (procedenciaID, years, tipoAnejadoID, fotografia, nombre)  
+	VALUES(@IDPais, @inAnos, @IDAnejado, @inFoto, @inNombre);
+	SET @IdLicor=SCOPE_IDENTITY();
+
+	INSERT INTO Inventarios (licorID, sucursalID, cantidad, precio)  
+	VALUES(@IdLicor, @inSucursal, @inCant, @inPrecio);
+
+END
+GO
+
+--EXEC insertarProducto 'Cerveza', 12031.93
+--GO
+
 CREATE PROCEDURE Facturacion
 @inID INT
 
@@ -9,21 +43,42 @@ BEGIN
 	BEGIN TRY
 		DECLARE
 			@idEmpleado INT,
-			@IdFactura INT;
+			@IdFactura INT,
+			@envio FLOAT,
+			@impuestos FLOAT;
 
 		SELECT TOP 1
 			@idEmpleado=E.ID
 		FROM
 			Empleados E, FacturaTemporal FT
 		WHERE
-			E.sucursalID=FT.sucursalID AND FT.Id=3;
+			E.sucursalID=FT.sucursalID AND FT.Id=@inID;
+		--------------------------------------------------------------------------------------
+		IF EXISTS(SELECT FT.envio FROM FacturaTemporal FT WHERE FT.Id=@inID AND FT.envio=0)
+		BEGIN
+			SET @envio=0;
+		END
+		ELSE
+		BEGIN
+			SET @envio=5000.00;
+		END
 
+		IF EXISTS(SELECT FT.metodoDePago FROM FacturaTemporal FT WHERE FT.Id=@inID AND FT.metodoDePago=1)
+		BEGIN
+			SET @impuestos=1;
+		END
+		ELSE
+		BEGIN
+			SET @impuestos=0;
+		END
+		---------------------------------------------------------------------------------------
 		BEGIN TRANSACTION facturar
 
-		INSERT INTO Facturas (fecha, clienteID, empleadoID, sucursalID, envio, total)  
+		INSERT INTO Facturas (fecha, clienteID, empleadoID, sucursalID, envio, total, impuestosTarjeta)  
 		SELECT
 			FT.fecha, FT.clienteID, @idEmpleado AS empleadoID,
-			FT.sucursalID, FT.envio, (FT.subtotal+FT.subtotal*0.10) AS total
+			FT.sucursalID, FT.envio, (FT.subtotal+@envio) AS total,
+			FT.subtotal*0.10*@impuestos
 		FROM
 			FacturaTemporal FT
 		WHERE
@@ -55,8 +110,8 @@ BEGIN
 END
 GO
 
-EXEC Facturacion 3
-GO
+--EXEC Facturacion 2
+--GO
 
 CREATE PROCEDURE getCant
 @inBebida varchar(50),
